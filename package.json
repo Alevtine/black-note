@@ -1,0 +1,17 @@
+{
+  "name": "black-note",
+  "version": "1.0.0",
+  "scripts": {
+    "front": "cd front && npm start",
+    "server": "nodemon ./back/server.js",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run front\""
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "node-fetch": "^2.2.0"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1"
+  }
+}
