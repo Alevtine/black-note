@@ -35,5 +35,27 @@ app.put('/api/note/:id', (req, res) => {
   res.json(note)
 })
 
+app.get('/', (req, res) => {
+  res.status(404).send(`Error is ${res.statusCode}: page is not found`)
+})
+
+app.get('/ping', (req, res) => {
+  res.json({
+    "data": "pong"
+  })
+})
+
+app.get('/time', (req, res) => {
+  const currentTime = new Date().toLocaleString();
+  console.log(currentTime)
+  res.json({
+    currentTime,
+  })
+})
+
+app.use('/*', (req, res) => {
+  res.status(501).send(`Error is ${res.statusCode}: not implemented to return something`)
+})
+
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
