@@ -1,68 +1,65 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchNoteListAction, submitNewNoteAction, showListAction, hideListAction, onChangeTextAction } from './actions/fetch';
+import Menu from './view/Menu';
+import NoteList from './view/noteList';
+
+function mapStateToProps(state) {
+  return {
+    allNotes: state.allNotes,
+    typed: state.typed,
+    isListShown: state.isListShown,
+  }
+}
 
 class App extends Component {
-    state = {
-      allNotes: '',
-      typed: '',
-      isListShown: false,
-    };
 
-  getNoteList = () => {
+  componentDidMount() {
     this.fetchNoteList()
-      .then(res => this.setState({ allNotes: res.map((note, i) => <p key={i}>{note.id}<br />{note.date}<br />{note.title}</p>)}))
-      .catch(err => console.log(err));
-      this.setState({
-        isListShown: true,
-      })
+  }
+
+  fetchNoteList = () => {
+    fetchNoteListAction(this.props.dispatch);
+  }
+
+  showNoteList = () => {
+    showListAction(this.props.dispatch)
   }
 
   hideNoteList = () => {
-    this.setState({
-      allNotes: '',
-      isListShown: false,
-    })
+    hideListAction(this.props.dispatch)
   }
 
-  fetchNoteList = async () => {
-    const response = await fetch('/api/note/list');
-    const body = await response.json();
-    if (response.status !== 200) throw Error(body.message);
-    return body;
-  };
-
-  handleSubmit = async evt => {
+  handleSubmit = evt => {
     evt.preventDefault();
-    if (this.state.typed) {
-      await fetch('/api/note', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ typed: this.state.typed }),
-      });
-    }
-  };
+    this.fetchNoteList()
+    const textarea = document.querySelector('textarea');
+    textarea.value = '';
+    submitNewNoteAction(this.props.typed);
+  }
+
+  onChange = (evt) => {
+    onChangeTextAction(this.props.dispatch, evt.target.value);
+  }
 
   render() {
+
     return (
-      <div className="App">
-        <header className="App-header">Black Note</header>
-        <div>{this.state.allNotes}</div>
-        <form onSubmit={this.handleSubmit}>
-          <p>
-            <strong>New Note will be sent to server:</strong>
-          </p>
-          <textarea
-            type="text"
-            onChange={evt => this.setState({ typed: evt.target.value })}
-          />
-          <br /><button type="submit">Submit new note</button>
-          <br /><button type="button" onClick={this.getNoteList}>Show all notes list</button>
-          <br /><button type="button" onClick={this.hideNoteList}>Hide all notes list</button>
-        </form>
-      </div>
+        <div className="App">
+          <header className="App-header">Black Note</header>
+            <Menu />
+            {/* <NoteList
+              allNotes={this.props.allNotes}
+              isListShown={this.props.isListShown}
+              typed={this.props.typed}
+              handleSubmit={this.handleSubmit}
+              showNoteList={this.showNoteList}
+              hideNoteList={this.hideNoteList}
+              onChange={this.onChange}
+            /> */}
+        </div>
     );
   }
 }
 
-export default App;
+export default connect(mapStateToProps)(App);
