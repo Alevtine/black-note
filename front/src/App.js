@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchNoteListAction, submitNewNoteAction, showListAction, hideListAction, onChangeTextAction } from './actions/fetch';
-import Menu from './view/Menu';
+import { fetchNoteListAction, submitNewNoteAction } from './actions/fetch';
 import NoteList from './view/noteList';
+import { Route } from 'react-router-dom';
+
 
 function mapStateToProps(state) {
   return {
     allNotes: state.allNotes,
-    typed: state.typed,
-    isListShown: state.isListShown,
+    currentNote: state.currentNote,
   }
 }
 
@@ -22,41 +22,16 @@ class App extends Component {
     fetchNoteListAction(this.props.dispatch);
   }
 
-  showNoteList = () => {
-    showListAction(this.props.dispatch)
-  }
-
-  hideNoteList = () => {
-    hideListAction(this.props.dispatch)
-  }
-
-  handleSubmit = evt => {
-    evt.preventDefault();
-    this.fetchNoteList()
-    const textarea = document.querySelector('textarea');
-    textarea.value = '';
-    submitNewNoteAction(this.props.typed);
-  }
-
-  onChange = (evt) => {
-    onChangeTextAction(this.props.dispatch, evt.target.value);
+  handleSubmit = () => {
+    submitNewNoteAction();
   }
 
   render() {
 
     return (
         <div className="App">
-          <header className="App-header">Black Note</header>
-            <Menu />
-            {/* <NoteList
-              allNotes={this.props.allNotes}
-              isListShown={this.props.isListShown}
-              typed={this.props.typed}
-              handleSubmit={this.handleSubmit}
-              showNoteList={this.showNoteList}
-              hideNoteList={this.hideNoteList}
-              onChange={this.onChange}
-            /> */}
+          <NoteList fetchedNotes={this.props.allNotes} />
+          <button type="button" onClick={() => this.handleSubmit()}>Create new note</button>
         </div>
     );
   }

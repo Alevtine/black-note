@@ -5,24 +5,12 @@ export const fetchNoteListAction = async (dispatch) => {
   dispatch({ type: 'FETCH_NOTE_LIST', payload: body })
 };
 
-export const submitNewNoteAction = async (typed) => {
+export const submitNewNoteAction = async (note) => {
   await fetch('/api/note', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ typed: typed }),
+    body: JSON.stringify({ currentNote: note }),
   });
-}
-
-export const showListAction = (dispatch) => {
-  dispatch({ type: 'SHOW_NOTE_LIST' })
-}
-
-export const hideListAction = (dispatch) => {
-  dispatch({ type: 'HIDE_NOTE_LIST' })
-}
-
-export const onChangeTextAction = (dispatch, typed) => {
-  dispatch({ type: 'TYPE_NEW_NOTE', payload: typed })
 }

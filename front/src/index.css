@@ -12,10 +12,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
+/* 
 .App {
   text-align: center;
-}
+} */
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
@@ -45,4 +45,8 @@ code {
   to {
     transform: rotate(360deg);
   }
+}
+
+li {
+  list-style-type: lower-greek;
 }
