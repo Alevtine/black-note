@@ -30,7 +30,7 @@ class App extends Component {
 
     return (
         <div className="App">
-          <NoteList fetchedNotes={this.props.allNotes} />
+          {this.props.children}
           <button type="button" onClick={() => this.handleSubmit()}>Create new note</button>
         </div>
     );

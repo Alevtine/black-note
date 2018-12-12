@@ -5,9 +5,10 @@ import { createStore } from 'redux';
 import './index.css';
 import App from './App';
 import reducer from './reducers/reducer';
-import { HashRouter, Route } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import Note from './view/Note';
 import Edit from './view/Edit';
+import NoteList from './view/noteList';
 
 
 const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
@@ -15,12 +16,14 @@ const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window
 ReactDOM.render(
   <Provider store={store}>
     <HashRouter>
-      <div>
+      <App>
         <header className="App-header">Black Note</header>
-        <Route exact path="/" component={App}/>
-        <Route exact path="/notes/:id" component={Note}/>
-        <Route path="/notes/:id/edit" component={Edit}/>
-      </div>
+        <Switch>
+          <Route exact path="/" component={NoteList}/>
+          <Route exact path="/notes/:id" component={Note}/>
+          <Route path="/notes/:id/edit" component={Edit}/>
+        </Switch>
+      </App>
     </HashRouter>
   </Provider>,
   document.getElementById('root')
