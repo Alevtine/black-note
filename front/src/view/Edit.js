@@ -1,19 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import {saveEditedNote} from '../actions/save.js';
 
 class Edit extends React.Component {
 
   render() {
-    const { currentNote } = this.props;
+    const { currentNote = {}, dispatch } = this.props;
 
   return (
     <div>
-      <p>
+      <p key={currentNote.id}>
       <textarea defaultValue={currentNote.title}></textarea>
       <textarea defaultValue={currentNote.text}></textarea>
       </p>
-      <button type="button" >Save it</button>
+      <button type="button" onClick={() => saveEditedNote(dispatch, currentNote.id, 1, 2)}>Save it</button>
       <button type="button">Cancel changes</button>
     </div>
   )

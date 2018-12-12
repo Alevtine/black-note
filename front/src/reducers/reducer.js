@@ -17,6 +17,8 @@ export default function reducer(state = initialState, action) {
         ...state,
         currentNote: action.payload
       }
+    case 'SAVE_EDITED_NOTE':
+      return state;
     default:
     return state;
   }

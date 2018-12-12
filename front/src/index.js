@@ -15,16 +15,18 @@ const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window
 
 ReactDOM.render(
   <Provider store={store}>
-    <HashRouter>
       <App>
+            <HashRouter>
+              <div>
         <header className="App-header">Black Note</header>
         <Switch>
           <Route exact path="/" component={NoteList}/>
           <Route exact path="/notes/:id" component={Note}/>
           <Route path="/notes/:id/edit" component={Edit}/>
         </Switch>
+        </div>
+            </HashRouter>
       </App>
-    </HashRouter>
   </Provider>,
   document.getElementById('root')
 );

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const Note = ({ currentNote }) => {
+const Note = ({ currentNote = {} }) => {
   return (
     <div>
       <div>Date: {currentNote.date}</div>
