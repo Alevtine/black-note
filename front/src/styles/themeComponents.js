@@ -47,7 +47,8 @@ export const TextArea = styled.textarea`
   TextArea.defaultProps = {
     onInput: (evt) => {
       evt.target.style.height = 'initial';
-      evt.target.style.height = `${evt.target.scrollHeight}px`;
+      //evt.target.style.height = `${evt.target.scrollHeight}px`;
+      evt.target.style.height = (Math.floor(evt.target.scrollHeight / 100) * 100 + 100) + 'px';
     },
     spellCheck: false,
   }
