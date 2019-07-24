@@ -1,55 +1,99 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { deleteCurrentNote, saveEditedNote } from '../actions/fetch.js';
+import { deleteCurrentNote, saveEditedNote, fetchNote } from '../actions/fetch.js';
 import { Button, TextArea } from '../styles/themeComponents.js';
 
-const Edit = (props) => {
-  const { currentNote = {}, dispatch } = props;
-
-  let textareaTitle = '';
-  let textareaText = '';
-
-  const returnCurrentValues = () => {
-    textareaTitle.value = currentNote.title;
-    textareaText.value = currentNote.text;
+class Edit extends React.Component {
+  state = {
+    title: this.props.currentNote.title,
+    text: this.props.currentNote.text,
   }
 
-    return (
+  componentDidMount() {
+    fetchNote(this.props.dispatch, this.props.match.params.id);
+  }
+
+  componentWillUnmount() {
+    localStorage.removeItem('currentNoteDraftTitle');
+    localStorage.removeItem('currentNoteDraftText');
+  }
+
+  onChangeTitle = (title) => {
+    this.setState({
+      title,
+    })
+    localStorage.setItem('currentNoteDraftTitle', title)
+  }
+
+  onChangeText = (text) => {
+    this.setState({
+      text,
+    })
+    localStorage.setItem('currentNoteDraftText', text)
+  }
+
+  getChangesFromLS = () => {
+    const changes = {
+      title: localStorage.getItem('currentNoteDraftTitle'),
+      text: localStorage.getItem('currentNoteDraftText'),
+    }
+    return changes;
+  }
+
+  returnCurrentValues = () => {
+    localStorage.removeItem('currentNoteDraftTitle');
+    localStorage.removeItem('currentNoteDraftText');
+    this.setState({
+      title: this.props.currentNote.title,
+      text: this.props.currentNote.text,
+    })
+  }
+
+
+  render() {
+    const { currentNote, dispatch } = this.props;
+    const { title, text } = this.state;
+    const changesInDraft = this.getChangesFromLS() !== null && this.getChangesFromLS();
+console.log(this.state)
+    return(
       <div className="App-main">
         <Link to="/"><Button primary>Go back to list</Button></Link>
         <p className="note-edited" key={currentNote.id}>
           <TextArea
             caption
-            defaultValue={currentNote.title}
-            ref={(node) => { textareaTitle = node }} />
+            onChange={(evt) => this.onChangeTitle(evt.target.value)}
+            value={changesInDraft.title || currentNote.title}
+          />
           <TextArea
             defaultHeight
-            defaultValue={currentNote.text}
-            ref={(node) => { textareaText = node }}
+            onChange={(evt) => this.onChangeText(evt.target.value)}
+            value={changesInDraft.text || currentNote.text}
           />
         </p>
         <Button
           primary
-          onClick={() => saveEditedNote(dispatch, currentNote.id, textareaTitle.value, textareaText.value)}>
+          onClick={() => saveEditedNote(dispatch, currentNote.id, title, text)}>
           Save changes
         </Button>
         <Button
-          onClick={() => returnCurrentValues()}>
+          onClick={() => this.returnCurrentValues()}>
           Cancel changes
         </Button>
         <Button
-          onClick={() => deleteCurrentNote(dispatch, currentNote.id, textareaTitle.value, textareaText.value)}>
+          onClick={() => deleteCurrentNote(dispatch, currentNote.id, title, text)}>
           Delete this note
         </Button>
       </div>
     )
+  }
 }
 
+
 const mapStateToProps = (state, ownProps) => {
+  console.log(state)
   return {
-    currentNote: state.allNotes.find(note => note.id === Number(ownProps.match.params.id)),
-    allNotes: state.allNotes,
+    currentNote: state.currentNote,
   }
 }
 

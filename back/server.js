@@ -9,7 +9,7 @@ const DATABASE_FILENAME = './blackNotes.db3';
 const DB = new DbController(DATABASE_FILENAME);
 
 if(!DB.exists) {
-  DB.query('CREATE TABLE notes ( id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(250), date TIMESTAMP, text TEXT )');
+  DB.query('CREATE TABLE notes ( id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(250), dateCreated TIMESTAMP, dateUpdated TIMESTAMP, text TEXT )');
 }
 
 app.use(bodyParser.json());
@@ -22,14 +22,14 @@ app.get('/api/note/list', (req, res) => {
 
 app.get('/api/note/:id', (req, res) => {
   const noteId = Number(req.params.id);
-  DB.query(`SELECT id, title, date, text FROM notes WHERE id=${noteId}`)
+  DB.query(`SELECT id, title, dateCreated, dateUpdated, text FROM notes WHERE id=${noteId}`)
   .to(notes => notes.map(note => res.json(note)))
 });
 
 app.post('/api/note', (req, res) => {
   const date = new Date();
   const { title, text } = req.body;
-  DB.query(`INSERT INTO notes (title, date, text) VALUES("${title}", ${date.getTime()}, "${text}")`)
+  DB.query(`INSERT INTO notes (title, dateCreated, text) VALUES("${title}", ${date.getTime()}, "${text}")`)
   .query('SELECT last_insert_rowid() AS id')
   .to(rows => {
     const lastId = rows[0].id;
@@ -42,7 +42,7 @@ app.put('/api/note/:id', (req, res) => {
   const date = new Date();
   const { title, text } = req.body;
   const noteId = Number(req.params.id);
-  DB.query(`UPDATE notes SET title="${title}", text="${text}" WHERE id=${noteId}`)
+  DB.query(`UPDATE notes SET title="${title}", text="${text}", dateUpdated="${date.getTime()}" WHERE id=${noteId}`)
     .to(notes => notes.find(note => res.json(note)));
 })
 

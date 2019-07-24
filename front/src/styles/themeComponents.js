@@ -11,6 +11,11 @@ export const Button = styled.button`
   font-size: small;
   margin: 1rem;
 
+  &:hover {
+  border: solid 1px mediumpurple;
+  color: mediumpurple;
+  }
+
   ${props =>
   props.primary &&
   css`
@@ -40,15 +45,14 @@ export const TextArea = styled.textarea`
   ${props =>
     props.defaultHeight &&
     css`
-      height: 150px;
+      min-height: 8em;
     `};
   `;
 
   TextArea.defaultProps = {
     onInput: (evt) => {
       evt.target.style.height = 'initial';
-      //evt.target.style.height = `${evt.target.scrollHeight}px`;
-      evt.target.style.height = (Math.floor(evt.target.scrollHeight / 100) * 100 + 100) + 'px';
+      evt.target.style.height = (Math.floor(evt.target.scrollHeight / 10) * 10 + 10) + 'px';
     },
     spellCheck: false,
   }

@@ -24,7 +24,7 @@ ReactDOM.render(
             <Route exact path="/" component={NoteList}/>
             <Route exact path="/notes/:id" component={Note}/>
             <Route exact path="/notes/:id/edit" component={Edit}/>
-            <Route exact path="/note" component={Create}/>
+            <Route exact path="/note" store={store} component={Create}/>
           </Switch>
         </div>
       </HashRouter>

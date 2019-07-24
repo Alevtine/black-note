@@ -35,7 +35,6 @@ function DbController(databaseFileName) {
       db.all(nextQuery.query, [], fetchRows);
     } else {
       stackStep--;
-      console.log('Stack overflow');
     }
   }
 
